@@ -235,11 +235,12 @@ def move ():
 	print "move function"
 	len, ang=find_object(r,g,b)
 	i=0
-	while(len is None or (not i==13) ):
+	while(not (rospy.is_shutdown())and len is None and (not i==13) ):
 		#moved = move_forward()
 		#print "moved: "+str(moved)
 		rotate(30)
 		i+=1
+		print "attemp number="+str(i)
 	        len, ang=find_object(r,g,b) 
 	print "ang main" +str(ang)
 	#rotate(ang*180/(2*PI))
