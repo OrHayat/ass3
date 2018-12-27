@@ -13,7 +13,6 @@ import math
 import time
 from std_msgs.msg import String
 from geometry_msgs.msg import Twist
-from node3 import find_object
 PI = 3.1415926535897
 import image_geometry
 import colorsys
@@ -200,11 +199,11 @@ def move_to_object():
 	current_dis=0
 	t1=0
 	t0=0
-	
 	center=data.ranges[0]
-	print "Range[0] "+str(center)
+	print "center move to object "+str (center)
+	rospy.loginfo(center)
 	msg= Twist()
-	if( center>0.5):
+	if( center>0.7):
 		msg.linear.x= 0.1
 	else:
 		msg.linear.x= 0.0
@@ -212,8 +211,7 @@ def move_to_object():
 		return False
 	t0=rospy.Time.now().to_sec()
 	r=rospy.Rate(40)
-	
-	while((not rospy.is_shutdown()) and current_dis<(center-0.6)):
+	while((not rospy.is_shutdown()) and current_dis<0.5):
 		pub.publish(msg)
 		t1=rospy.Time.now().to_sec()
 		r.sleep()
@@ -235,17 +233,18 @@ def move ():
 	print "move function"
 	len, ang=find_object(r,g,b)
 	i=0
-	while(not (rospy.is_shutdown())and len is None and (not i==13) ):
-		#moved = move_forward()
-		#print "moved: "+str(moved)
+	print "len before loop ="+str(len)
+	while(len is None ):
+		moved = move_forward()
+		print "moved: "+str(moved)
 		rotate(30)
 		i+=1
-		print "attemp number="+str(i)
+		print "len ="+str(len)
 	        len, ang=find_object(r,g,b) 
 	print "ang main" +str(ang)
-	#rotate(ang*180/(2*PI))
+	rotate(ang*180/(2*PI))
 	print "Rotated"
-	move_to_object()
+	move_forward()
 	print "moved to object"
 
 		
